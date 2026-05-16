@@ -1,27 +1,40 @@
 'use client';
+import Link from 'next/link';
 import { useCartStore } from '@/store/cart';
+import SearchBar from './SearchBar';
+import ThemeToggle from './ThemeToggle';
+import styles from './Header.module.css';
 
 export default function Header() {
-  const items = useCartStore((state) => state.items);
+  const { items, toggleCart } = useCartStore();
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <header style={{
-      padding: '1rem 2rem',
-      borderBottom: '1px solid #eee',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      backgroundColor: 'white',
-      zIndex: 100
-    }}>
-      <div style={{ fontWeight: 'bold' }}>HEADLESS CLOTHING</div>
-      <div data-testid="cart-count">
-        Cart: {cartCount}
+    <header className={styles.header}>
+      <div className={styles.container}>
+        <div className={styles.left}>
+          <Link href="/" className={styles.logo}>
+            Clothing <span className={styles.studio}>Plug</span>
+          </Link>
+        </div>
+        
+        <nav className={styles.center}>
+          <Link href="/" className={styles.navLink}>Shop</Link>
+          <Link href="/about" className={styles.navLink}>Our Story</Link>
+          <Link href="/categories" className={styles.navLink}>Collection</Link>
+        </nav>
+
+        <div className={styles.right}>
+          <SearchBar />
+          <ThemeToggle />
+          <button 
+            className={styles.cartButton}
+            onClick={() => toggleCart(true)}
+          >
+            Cart
+            {cartCount > 0 && <span className={styles.badge}>{cartCount}</span>}
+          </button>
+        </div>
       </div>
     </header>
   );

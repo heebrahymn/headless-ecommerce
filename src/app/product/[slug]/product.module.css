@@ -1,29 +1,117 @@
-.main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.container {
   min-height: 100vh;
-  padding: 2rem;
-  background-color: #f9f9f9;
+  padding: 140px var(--container-padding) 100px;
+  background-color: var(--background);
 }
 
-.container {
-  background: white;
-  padding: 3rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  max-width: 600px;
-  width: 100%;
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.imageSection {
+  position: sticky;
+  top: 140px;
+}
+
+.imageWrapper {
+  position: relative;
+  aspect-ratio: 4/5;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  background: #efefef;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.placeholder {
+  aspect-ratio: 4/5;
+  background: var(--surface);
+  border-radius: var(--radius-card);
+}
+
+.contentSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.breadcrumb {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  transition: opacity 0.3s ease;
+}
+
+.breadcrumb a:hover {
+  opacity: 0.7;
+}
+
+.badge {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  color: var(--foreground);
 }
 
 .price {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-bottom: 40px;
 }
 
-.description {
-  margin-bottom: 2rem;
+.shortDescription {
+  font-size: 1rem;
+  color: var(--text-muted);
   line-height: 1.6;
-  color: #666;
+  margin-bottom: 40px;
+}
+
+.shortDescription :global(p) {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 100px var(--container-padding) 60px;
+  }
+  
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .imageSection {
+    position: relative;
+    top: 0;
+  }
+  
+  .title {
+    font-size: 32px;
+  }
 }

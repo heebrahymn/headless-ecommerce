@@ -1,0 +1,55 @@
+.searchBar {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 4px 20px;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  width: 220px;
+}
+
+.searchBar:focus-within {
+  border-color: var(--accent-primary);
+  background: var(--surface-hover);
+  width: 300px;
+}
+
+.input {
+  background: transparent;
+  border: none;
+  color: var(--foreground);
+  padding: 8px 0;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.button {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.searchBar:focus-within .button {
+  color: var(--accent-primary);
+}
+
+@media (max-width: 768px) {
+  .searchBar {
+    display: none;
+  }
+}

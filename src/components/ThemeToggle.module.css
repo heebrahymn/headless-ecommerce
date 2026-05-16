@@ -1,0 +1,23 @@
+.toggle {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.toggle:hover {
+  background: var(--surface-hover);
+  transform: translateY(-2px);
+}
+
+.toggle svg {
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,92 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(circle at center, #111 0%, #000 100%);
+}
+
+.card {
+  max-width: 500px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  padding: 60px 40px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+  animation: slideUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.icon {
+  width: 80px;
+  height: 80px;
+  background: var(--accent-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 32px;
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+}
+
+.icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 16px;
+}
+
+.message {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.primaryButton {
+  background: var(--foreground);
+  color: var(--background);
+  padding: 16px;
+  border-radius: 16px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px var(--shadow);
+}
+
+.secondaryButton {
+  background: transparent;
+  color: var(--foreground);
+  padding: 16px;
+  border-radius: 16px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+}

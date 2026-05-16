@@ -34,3 +34,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# project specific
+*.js
+*.mjs
+*.html
+cypress/screenshots/
+!src/**/*.js
+!src/**/*.mjs

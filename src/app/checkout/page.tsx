@@ -1,13 +1,34 @@
 'use client';
 import { useState } from 'react';
 import { useCartStore } from '@/store/cart';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import CheckoutForm from '@/components/CheckoutForm';
+import styles from './checkout.module.css';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
-  const [email, setEmail] = useState('');
-  const [stripeReady, setStripeReady] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    city: '',
+    state: '',
+    postcode: '',
+    country: 'US'
+  });
+  const [clientSecret, setClientSecret] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,87 +36,126 @@ export default function CheckoutPage() {
     setError('');
 
     try {
-      // 1. Hit API route to check inventory (uncached) and create pending Woo order
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, items }),
+        body: JSON.stringify({ ...formData, items }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setStripeReady(true);
+        setClientSecret(data.clientSecret);
       } else {
-        setError(data.message || 'Something went wrong. Please check your inventory or try again.');
+        console.error('Checkout API Error:', data);
+        setError(data.message || 'Something went wrong.');
       }
-    } catch (err) {
-      setError('Network error. Please try again.');
+    } catch (err: any) {
+      console.error('Checkout Network Error:', err);
+      setError(`Network error: ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  if (stripeReady) {
+  const theme = useCartStore((state) => state.theme);
+
+  const appearance = { 
+    theme: (theme === 'dark' ? 'night' : 'stripe') as const,
+    variables: {
+      colorPrimary: '#0071e3',
+      fontFamily: 'Outfit, sans-serif',
+      borderRadius: '12px',
+    }
+  };
+  const options = { clientSecret, appearance };
+
+  if (clientSecret) {
     return (
-      <main style={{ padding: '4rem', textAlign: 'center' }}>
-        <div data-testid="stripe-payment-form" style={{ padding: '2rem', border: '2px dashed #ccc' }}>
-          <h2>Stripe Payment Form Placeholder</h2>
-          <p>This is where the Stripe Elements would be mounted.</p>
+      <main className={styles.container}>
+        <div className={styles.checkoutBox}>
+          <h1 className={styles.title}>Payment Details</h1>
+          <p className={styles.summary}>Order Total: <strong>${total.toFixed(2)}</strong></p>
+          <Elements options={options} stripe={stripePromise}>
+            <CheckoutForm />
+          </Elements>
         </div>
       </main>
     );
   }
 
   return (
-    <main style={{ padding: '4rem', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Checkout</h1>
-      {items.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div>
-            <h3>Your Items:</h3>
-            <ul>
-              {items.map((item) => (
-                <li key={item.id}>{item.name} x {item.quantity} - ${item.price * item.quantity}</li>
-              ))}
-            </ul>
-          </div>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label htmlFor="email">Email Address</label>
-            <input 
-              id="email"
-              data-testid="email-input" 
-              type="email"
-              value={email} 
-              onChange={e => setEmail(e.target.value)} 
-              required 
-              style={{ padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
-            />
-          </div>
+    <main className={styles.container}>
+      <div className={styles.checkoutLayout}>
+        <div className={styles.formSection}>
+          <h1 className={styles.title}>Checkout</h1>
+          {items.length === 0 ? (
+            <div className={styles.empty}>
+              <p>Your cart is empty.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={styles.grid}>
+                <div className={styles.field}>
+                  <label>First Name</label>
+                  <input name="firstName" value={formData.firstName} onChange={handleChange} required />
+                </div>
+                <div className={styles.field}>
+                  <label>Last Name</label>
+                  <input name="lastName" value={formData.lastName} onChange={handleChange} required />
+                </div>
+              </div>
+              
+              <div className={styles.field}>
+                <label>Email Address</label>
+                <input name="email" type="email" value={formData.email} onChange={handleChange} required />
+              </div>
 
-          {error && <p style={{ color: 'red' }}>{error}</p>}
+              <div className={styles.field}>
+                <label>Street Address</label>
+                <input name="address" value={formData.address} onChange={handleChange} required />
+              </div>
 
-          <button 
-            type="submit" 
-            data-testid="checkout-submit"
-            disabled={loading}
-            style={{ 
-              padding: '1rem', 
-              backgroundColor: '#000', 
-              color: '#fff', 
-              border: 'none', 
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.7 : 1
-            }}
-          >
-            {loading ? 'Processing...' : 'Proceed to Payment'}
-          </button>
-        </form>
-      )}
+              <div className={styles.grid}>
+                <div className={styles.field}>
+                  <label>City</label>
+                  <input name="city" value={formData.city} onChange={handleChange} required />
+                </div>
+                <div className={styles.field}>
+                  <label>Postcode</label>
+                  <input name="postcode" value={formData.postcode} onChange={handleChange} required />
+                </div>
+              </div>
+
+              {error && <p className={styles.error}>{error}</p>}
+
+              <button 
+                type="submit" 
+                className={styles.submitButton}
+                disabled={loading}
+              >
+                {loading ? 'Securing payment...' : `Pay $${total.toFixed(2)}`}
+              </button>
+            </form>
+          )}
+        </div>
+
+        <div className={styles.summarySection}>
+          <h2 className={styles.subtitle}>Order Summary</h2>
+          <div className={styles.orderItems}>
+            {items.map((item) => (
+              <div key={item.id} className={styles.orderItem}>
+                <span>{item.name} x {item.quantity}</span>
+                <span>${(item.price * item.quantity).toFixed(2)}</span>
+              </div>
+            ))}
+          </div>
+          <div className={styles.totalRow}>
+            <span>Total</span>
+            <span className={styles.totalPrice}>${total.toFixed(2)}</span>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,13 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbfbfb;
+  --foreground: #000000;
+  --accent-primary: #000000;
+  --accent-secondary: #666666;
+  --surface: #ffffff;
+  --surface-hover: #f9f9f9;
+  --border: #e2e2e2;
+  --text-muted: #666666;
+  --shadow: none;
+  --radius-pill: 2px;
+  --radius-card: 0px;
+  --container-padding: 80px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme='dark'] {
+  --background: #1a1a1a;
+  --foreground: #f4f1ec;
+  --surface: #222222;
+  --surface-hover: #2a2a2a;
+  --border: rgba(244, 241, 236, 0.1);
+  --text-muted: #999999;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-transform: none;
+}
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 html,
@@ -17,17 +54,8 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 a {
@@ -35,8 +63,26 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+main {
+  animation: fadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.reveal {
+  animation: reveal 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+::selection {
+  background: var(--accent-primary);
+  color: white;
 }

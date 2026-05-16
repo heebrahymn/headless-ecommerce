@@ -1,95 +1,60 @@
+import { getProducts } from "@/lib/woocommerce";
+import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./page.module.css";
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+export const revalidate = 3600;
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+export default async function Home() {
+  const products = await getProducts(12);
+
+  return (
+    <div className={styles.container}>
+      <header className={styles.hero}>
+        <div className={styles.heroLayout}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>EST. 2025</div>
+            <h1 className={styles.title}>
+              Curated <br />Essentials
+            </h1>
+            <p className={styles.subtitle}>
+              Defining the modern wardrobe through intentional design and unparalleled quality.
+            </p>
+            <Link href="#collection" className={styles.heroCTA}>
+              Discover Collection
+            </Link>
+          </div>
+          <div className={styles.heroImageContainer}>
+            <Image 
+              src="/vessa_hero_lifestyle_editorial_1778968877493.png" 
+              alt="Editorial Lifestyle" 
+              fill
+              priority
+              className={styles.heroImage}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+          </div>
         </div>
+      </header>
+
+      <main className={styles.main} id="collection">
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Latest Arrivals</h2>
+          <div className={styles.sectionDivider}></div>
+        </div>
+        
+        <div className={styles.grid}>
+          {products.map((product: any) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        
+        {products.length === 0 && (
+          <div className={styles.empty}>
+            <p>No products found. Add some products in your WooCommerce dashboard.</p>
+          </div>
+        )}
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

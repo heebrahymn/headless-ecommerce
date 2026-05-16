@@ -1,0 +1,49 @@
+.container {
+  min-height: 100vh;
+  padding: 120px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 60px;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 8px;
+}
+
+.accent {
+  color: var(--accent-primary);
+}
+
+.count {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.empty {
+  text-align: center;
+  padding: 100px 0;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 40px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.empty h2 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.empty p {
+  color: rgba(255, 255, 255, 0.5);
+}
