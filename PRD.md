@@ -41,6 +41,4 @@ A modern, headless e-commerce storefront for a physical clothing brand. The proj
   - Cypress runs autonomously via GitHub Actions against Vercel Preview URLs.
   - *Constraint Guard:* Tests are triggered exclusively on Pull Requests targeting the `main` branch to optimize GitHub Action minutes and prevent CI bottlenecks.
 
-## 6. Document History
-- **Created:** 2026-05-15
-- **Status:** Approved (Multi-Agent Brainstorming Protocol Completed)
+
