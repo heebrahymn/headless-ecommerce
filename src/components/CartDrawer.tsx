@@ -15,15 +15,26 @@ export default function CartDrawer() {
     if (!image) return '';
     let url = typeof image === 'string' ? image : image.sourceUrl || '';
     
-    // Fallback: If image URL contains old local domains, replace with the current live WooCommerce site URL
+    // Completely foolproof replacement:
+    // If the URL is relative, contains a local domain, or uses insecure HTTP,
+    // we extract the pathname and prepend the live WooCommerce backend origin.
     const wUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL;
-    if (wUrl && (url.includes('headless-ecommerse.local') || url.includes('headless-ecommerce.local'))) {
+    if (wUrl) {
       try {
         const liveOrigin = new URL(wUrl).origin;
-        url = url.replace(/https?:\/\/headless-ecommerse\.local/, liveOrigin)
-                 .replace(/https?:\/\/headless-ecommerce\.local/, liveOrigin);
+        if (url.startsWith('/')) {
+          url = `${liveOrigin}${url}`;
+        } else if (
+          url.includes('localhost') || 
+          url.includes('127.0.0.1') || 
+          url.includes('.local') || 
+          url.startsWith('http://')
+        ) {
+          const parsedUrl = new URL(url);
+          url = `${liveOrigin}${parsedUrl.pathname}${parsedUrl.search}`;
+        }
       } catch (e) {
-        console.error(e);
+        console.error('Error parsing image URL in CartDrawer:', e);
       }
     }
     return url;
