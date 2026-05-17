@@ -3,8 +3,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'headless-ecommerse.local',
+        protocol: 'https',
+        hostname: 'dev-headless-ecommerce.pantheonsite.io',
       },
       {
         protocol: 'https',
