@@ -61,7 +61,7 @@ export default function CheckoutPage() {
   const theme = useCartStore((state) => state.theme);
 
   const appearance = { 
-    theme: (theme === 'dark' ? 'night' : 'stripe') as const,
+    theme: (theme === 'dark' ? 'night' : 'stripe') as 'night' | 'stripe',
     variables: {
       colorPrimary: '#0071e3',
       fontFamily: 'Outfit, sans-serif',
