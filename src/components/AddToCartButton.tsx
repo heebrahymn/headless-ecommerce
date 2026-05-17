@@ -32,7 +32,7 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
 
   return (
     <button className={styles.button} onClick={handleAddToCart}>
-      Add to Bag
+      Add to Cart
     </button>
   );
 }

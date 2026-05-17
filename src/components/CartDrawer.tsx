@@ -11,6 +11,24 @@ export default function CartDrawer() {
 
   const total = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+  const getImageUrl = (image: any) => {
+    if (!image) return '';
+    let url = typeof image === 'string' ? image : image.sourceUrl || '';
+    
+    // Fallback: If image URL contains old local domains, replace with the current live WooCommerce site URL
+    const wUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL;
+    if (wUrl && (url.includes('headless-ecommerse.local') || url.includes('headless-ecommerce.local'))) {
+      try {
+        const liveOrigin = new URL(wUrl).origin;
+        url = url.replace(/https?:\/\/headless-ecommerse\.local/, liveOrigin)
+                 .replace(/https?:\/\/headless-ecommerce\.local/, liveOrigin);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return url;
+  };
+
   return (
     <>
       <div className={styles.overlay} onClick={() => toggleCart(false)} />
@@ -32,7 +50,7 @@ export default function CartDrawer() {
                 <div className={styles.itemImage}>
                   {item.image ? (
                     <img 
-                      src={typeof item.image === 'string' ? item.image : (item.image as any).sourceUrl || ''} 
+                      src={getImageUrl(item.image)} 
                       alt={item.name} 
                       className={styles.thumbnail}
                     />

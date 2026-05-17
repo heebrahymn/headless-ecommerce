@@ -35,7 +35,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
       onClick={handleAddToCart}
       className={styles.addToCartBtn}
     >
-      Add to Bag
+      Add to Cart
     </button>
   );
 }
